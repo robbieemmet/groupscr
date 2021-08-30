@@ -1,0 +1,23 @@
+
+model {
+
+lambda0~dunif(0,15)
+sigma~dunif(0, 15)
+sigma2<-sigma*sigma
+
+psi~dunif(0,1)
+
+for(i in 1:M){
+ 	z[i] ~ dbern(psi)
+	s[i,1]~dunif(Xl,Xu)
+ 	s[i,2]~dunif(Yl,Yu)
+
+  for(j in 1:J){
+		d2[i,j]<- pow(s[i,1]-X[j,1],2) + pow(s[i,2]-X[j,2],2)
+		y[i,j] ~ dpois(lam[i,j])
+		lam[i,j]<- z[i]*lambda0*trapop[j]*exp(-d2[i,j]/(2*sigma2))    #but p0 is then rate if y is poisson
+}
+}
+N<-sum(z[])
+D<-N/area
+}
